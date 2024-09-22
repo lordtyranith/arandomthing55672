@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum DifficultyLevel {Easy, Medium, Hard}
+public enum StageLevel {One, Two, Three, Four, Five}
 
 
 public class PlayerManager : Singleton<PlayerManager>
 {
     public int playerScore;
     public int playerCombo;
-    public int playerMatch;
-    public DifficultyLevel difficultyLevel;
+   // public int playerMatch;
+    public StageLevel stageLevel;
     public int playerPlays;
 
 

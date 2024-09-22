@@ -1,25 +1,21 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 [System.Serializable]
-
-public class CardManager
+public class UniqueCard
 {
     public string CardName;
     public string CardID;
-    public Material CardImage;
+    public Material CardMaterial;
 
 }
+[CreateAssetMenu(fileName = "UniqueCard", menuName = "CardsToList")]
 
-[CreateAssetMenu(fileName = "CardManager", menuName = "ScriptableObjects/CardManager")]
 
-public class CardList : ScriptableObject
+public class CardManager : ScriptableObject
 {
-    public List<CardManager> listCards;
+    public List<UniqueCard> CardsList;
 
 
 
 }
-

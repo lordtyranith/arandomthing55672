@@ -103,10 +103,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1373f787a962e2346ad266b3623b9271, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  faceDownCard: {fileID: 0}
-  faceUpCard: {fileID: 0}
+  faceDownCard: {fileID: 3262819427997533516}
+  cardType:
+    CardName: 
+    CardID: 
+    CardMaterial: {fileID: 0}
+  cardFacedUp: {fileID: 4958523088689696714}
   rotationSpeed: 250
-  deceleration: 2
   isRotating: 0
   isFaceUp: 0
 --- !u!65 &5524577053597342131

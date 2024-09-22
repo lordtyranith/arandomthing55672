@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37c9874ea99e8074486be8c9b66e1b49, type: 3}
+  m_Name: UniqueCard
+  m_EditorClassIdentifier: 
+  CardsList:
+  - CardName: Card1
+    CardID: 1
+    CardMaterial: {fileID: 2100000, guid: 835d3b69edaf7964ab694f2aee74796c, type: 2}
+  - CardName: Card2
+    CardID: 2
+    CardMaterial: {fileID: 2100000, guid: 655e35064efd326458f29d7f9826a289, type: 2}
+  - CardName: Card3
+    CardID: 3
+    CardMaterial: {fileID: 2100000, guid: d65c4039a94e39c4a9ec71b1283df198, type: 2}
+  - CardName: Card4
+    CardID: 4
+    CardMaterial: {fileID: 2100000, guid: ad09d326476b1e647b4237ed3e4416dd, type: 2}
+  - CardName: Card5
+    CardID: 5
+    CardMaterial: {fileID: 2100000, guid: 527d1a3ed5594ae46b1b02cf10690562, type: 2}
+  - CardName: Card6
+    CardID: 6
+    CardMaterial: {fileID: 2100000, guid: 242f5e605be48bf42b1f40889001e6a5, type: 2}
+  - CardName: Card7
+    CardID: 7
+    CardMaterial: {fileID: 2100000, guid: 8fe890c511da5334ea5841f81f381c1e, type: 2}
+  - CardName: Card8
+    CardID: 8
+    CardMaterial: {fileID: 2100000, guid: 0b237c928d24faa4ca57c69f769981ca, type: 2}
+  - CardName: Card9
+    CardID: 9
+    CardMaterial: {fileID: 2100000, guid: b4b7bac6862faec43b55bded0e1c5150, type: 2}
+  - CardName: Card10
+    CardID: 10
+    CardMaterial: {fileID: 2100000, guid: b84499ff0c659884da6d0487bfd8f894, type: 2}

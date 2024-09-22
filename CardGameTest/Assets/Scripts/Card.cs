@@ -6,18 +6,45 @@ using UnityEngine;
 public class Card : MonoBehaviour
 {
     [Header("Cards Properties")]
-    [SerializeField] Material faceDownCard;
-    [SerializeField] Material faceUpCard;
+    [SerializeField] MeshRenderer faceDownCard;
+    public UniqueCard cardType;
+    [SerializeField] MeshRenderer cardFacedUp;
+    public bool cardFilled = false;
 
     [Header("Rotation Properties")]
-    public float rotationSpeed = 100f;  
-    private float currentRotation = 0f; 
+    public float rotationSpeed = 100f;
+    private float currentRotation = 0f;
     public bool isRotating = false;
     public bool isFaceUp = false;
 
+    public bool cardUsed = false;
+
     private void OnMouseDown()
     {
-        RotationCard();
+        if (!cardUsed)
+        {
+            RotationCard();
+            if (GameManager.Instance.firstPair)
+            {
+                GameManager.Instance.pair1 = this;
+                GameManager.Instance.firstPair = false;
+
+            }
+            else
+            {
+                GameManager.Instance.pair2 = this;
+                GameManager.Instance.firstPair = true;
+                GameManager.Instance.CheckIfItsMatch();
+
+
+
+            }
+            PlayerManager.Instance.playerPlays = PlayerManager.Instance.playerPlays + 1;
+
+            StartCoroutine(AnimationDelay(1.2f, true));
+        }
+
+
     }
 
     public void RotationCard()
@@ -25,8 +52,21 @@ public class Card : MonoBehaviour
         isRotating = true;
     }
 
-     private void Update()
-     {
+    private void Update()
+    {
+
+        if (isFaceUp)
+        {
+            cardUsed = true;
+        }
+        else
+        {
+            cardUsed = false;
+        }
+
+
+
+
         if (isRotating && !isFaceUp)
         {
             float rotationStep = rotationSpeed * Time.deltaTime;
@@ -38,12 +78,12 @@ public class Card : MonoBehaviour
             {
 
                 float excessRotation = currentRotation - 180f;
-                transform.Rotate(0f, 0f, -excessRotation); 
-                isRotating = false; 
-                currentRotation = 0f; 
+                transform.Rotate(0f, 0f, -excessRotation);
+                isRotating = false;
+                currentRotation = 0f;
             }
         }
-        else if(isRotating && isFaceUp)
+        else if (isRotating && isFaceUp)
         {
             float rotationStep = rotationSpeed * Time.deltaTime;
             currentRotation -= rotationStep;
@@ -52,26 +92,48 @@ public class Card : MonoBehaviour
             if (currentRotation <= 0f)
             {
                 float excessRotation = -currentRotation;
-                transform.Rotate(0f, 0f, excessRotation); 
-                isRotating = false; 
-                currentRotation = 0f; 
+                transform.Rotate(0f, 0f, excessRotation);
+                isRotating = false;
+                currentRotation = 0f;
             }
+
         }
 
-
-     }
-
-  
-
-    public void Hit()
-    {
-
-    }
-
-    public void Miss()
-    {
-
     }
 
 
+
+
+
+    public void RotationDelaySeconds(float timer)
+    {
+      
+        StartCoroutine(Returning(timer));
+
+
+    }
+
+    public void CallTypeCard(UniqueCard card)
+    {
+        cardType = card;
+        cardFacedUp.material = card.CardMaterial;
+        cardFilled = true;
+    }
+
+    IEnumerator Returning(float timer)
+    {
+        yield return new WaitForSeconds(timer);
+        RotationCard();
+
+        isFaceUp = false;
+        //cardUsed = false;
+    }
+
+    IEnumerator AnimationDelay(float timer, bool value1)
+    {
+        yield return new WaitForSeconds(timer);
+      
+        isFaceUp = value1;
+        
+    }
 }
