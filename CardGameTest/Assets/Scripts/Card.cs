@@ -27,6 +27,7 @@ public class Card : MonoBehaviour
     {
         if (!cardUsed)
         {
+            cardUsed = true;
             SoundManager.Instance.PlayFlipping();
 
             RotationCard();
@@ -59,7 +60,8 @@ public class Card : MonoBehaviour
     {
         isRotating = true;
         isFaceUp = false;
-        cardUsed = false;
+        cardUsed = false;   
+       
 
     }
     private void Update()
@@ -97,7 +99,7 @@ public class Card : MonoBehaviour
                 transform.Rotate(0f, 0f, excessRotation);
                 isRotating = false;
                 currentRotation = 0f;
-
+                cardUsed = false;
             }
 
         }

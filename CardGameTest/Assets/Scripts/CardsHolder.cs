@@ -9,15 +9,52 @@ public class CardsHolder : MonoBehaviour
     public List<Card> ActiveCards = new List<Card>(); 
     [SerializeField] List<Card> Cards = new List<Card>();
 
-
+    public void ResetFilled()
+    {
+        foreach(Card card in Cards)
+        {
+            card.cardFilled = false;
+        }
+       
+    }
     public void StartingGame()
     {
-        OrganizeColuns(GameManager.Instance.StageLevel);
-        ShuffleCards();
-        StartCoroutine(StartingRound());
-
+        ResetFilled();
+        OrganizeColuns(GameManager.Instance.StageLevel);    
     }
 
+    public void LoadingGame()
+    {
+        ResetFilled();
+        OrganizeColuns(GameManager.Instance.StageLevel);
+        LoadCardsOnTheTable();
+        StartCoroutine(ContinueRound());
+    }
+
+    IEnumerator ContinueRound()
+    {
+        foreach (Card c in ActiveCards)
+        {
+            c.RotationCard();
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        foreach (Card c in ActiveCards)
+        {
+            c.RotationCard();
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        foreach(Card c in GameManager.Instance.cardTurnedRight)
+        {
+            c.RotationCard();
+            c.cardUsed = true;  
+        }
+
+
+    }
     IEnumerator StartingRound()
     {
         foreach(Card c in ActiveCards)
@@ -26,10 +63,10 @@ public class CardsHolder : MonoBehaviour
         }
 
         yield return new WaitForSeconds(3f);
-
         foreach (Card c in ActiveCards)
         {
-            c.RotationCard();
+            //  c.RotationCard();
+            c.TurnCardFaceDown();
         }
     }
 
@@ -65,6 +102,8 @@ public class CardsHolder : MonoBehaviour
             case StageLevel.Five:              
                 break;
         }
+
+        ShuffleCards();
     }
 
     public void DisableColum(int index)
@@ -106,33 +145,33 @@ public class CardsHolder : MonoBehaviour
         List<int> indexSelected = new List<int>();  
         foreach(UniqueCard card in GameManager.Instance.CardManager.CardsList)
         {
+            Debug.Log(card.CardName);   
             indexSelected.Add(indexList);
             indexList++;    
         }
 
         indexList = 0;
-        Shuffle(indexSelected);
 
-
-        foreach (Card item in ActiveCards)
-        {
+         foreach (Card item in ActiveCards)
+         {
             if (!item.cardFilled)
-            {
-
+            {   
                 item.CallTypeCard(GameManager.Instance.CardManager.CardsList[indexSelected[0]]);
                 ActiveCards[indexList + 1].CallTypeCard(GameManager.Instance.CardManager.CardsList[indexSelected[0]]);
-
                 indexSelected.Remove(indexSelected[0]);
-            }
-
-            indexList++;
-
-        }
-
-
-    
+            }       
+             indexList++;      
+         }      
+        StartCoroutine(StartingRound());
     }
 
+    public void LoadCardsOnTheTable()
+    {
+        foreach (Card item in ActiveCards)
+        {
+            item.CallTypeCard(item.cardType);
+        }
+    }
 
     void Shuffle<T>(List<T> list)
     {
