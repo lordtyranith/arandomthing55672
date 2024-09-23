@@ -1,11 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Xml;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using static UnityEditor.Progress;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>   
 {
@@ -21,8 +17,12 @@ public class GameManager : Singleton<GameManager>
 
     public bool firstPair = true;   
 
-    bool gameStarted = false;   
+    bool gameStarted = false;
+    public bool mouseEnable = true;
 
+    public Card pair1;
+    public Card pair2
+        ;
     public void StartingLevel()
     {
         cardTurnedRight.Clear();
@@ -36,6 +36,7 @@ public class GameManager : Singleton<GameManager>
 
     public void LoadingSavedGame()
     {
+        GameManager.Instance.mouseEnable = false;
         UIManager.Instance.UpdatingUI();
         CardsHolder.LoadingGame();
         gameStarted = true;
@@ -61,7 +62,7 @@ public class GameManager : Singleton<GameManager>
 
         yield return new WaitUntil(() => second.isRotating == false);
 
-        if(first.cardType.CardName == second.cardType.CardName)
+        if(first.cardType.CardName == second.cardType.CardName && first != second)
         {
             first.TriggerScaleFeedback();
             second.TriggerScaleFeedback();
@@ -87,10 +88,6 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-    public void LoadingGame()
-    {
-        LoadGame();
-    }
 
     public void Hit()
     {
@@ -141,6 +138,7 @@ public class GameManager : Singleton<GameManager>
             if (PlayerManager.Instance.playerPlays == CardsHolder.ActiveCards.Count * 2)
             {
                 SoundManager.Instance.PlayLose();
+                SceneManager.LoadScene(0);
             }
         }
  
@@ -172,7 +170,9 @@ public class GameManager : Singleton<GameManager>
         {
             PlayerManager.Instance.playerScore = data.playerScore;
             PlayerManager.Instance.playerCombo = data.playerCombo;
+            PlayerManager.Instance.playerPlays = data.playerPlays;
             PlayerManager.Instance.stageLevel = (StageLevel)System.Enum.Parse(typeof(StageLevel), data.stage);
+            StageLevel = (StageLevel)System.Enum.Parse(typeof(StageLevel), data.stage);
             PlayerManager.Instance.playerTotalScore = data.playerTotalScore;
             CardsHolder.ActiveCards = data.ActiveCards;
 
@@ -183,13 +183,17 @@ public class GameManager : Singleton<GameManager>
                 indexOf++;  
             }
 
-            cardTurnedRight = data.turnedFaceUp;    
+            cardTurnedRight = data.turnedFaceUp;
+
+            LoadingSavedGame();
         }
     }
 
 
     public void NextStage()
     {
+
+       cardsQueue.Clear(); 
        foreach(Card c in CardsHolder.ActiveCards)
        {
             c.TurnCardFaceDown();

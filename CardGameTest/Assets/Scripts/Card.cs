@@ -25,7 +25,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!cardUsed)
+        if (!cardUsed && GameManager.Instance.mouseEnable)
         {
             cardUsed = true;
             SoundManager.Instance.PlayFlipping();
@@ -33,15 +33,26 @@ public class Card : MonoBehaviour
             RotationCard();
             if (GameManager.Instance.firstPair)
             {
-                GameManager.Instance.cardsQueue.Enqueue(this);  
+                GameManager.Instance.cardsQueue.Enqueue(this);
+                GameManager.Instance.pair1 = this;
                 GameManager.Instance.firstPair = false;
             }
             else
             {
-                GameManager.Instance.cardsQueue.Enqueue(this);
-                GameManager.Instance.StartCompair();
-                GameManager.Instance.firstPair = true;
-                PlayerManager.Instance.playerPlays = PlayerManager.Instance.playerPlays + 1;
+                GameManager.Instance.pair2 = this;
+
+                if(GameManager.Instance.pair1 == GameManager.Instance.pair2)
+                {
+                    return;
+                }
+                else
+                {
+                    GameManager.Instance.cardsQueue.Enqueue(this);
+                    GameManager.Instance.StartCompair();
+                    GameManager.Instance.firstPair = true;
+                    PlayerManager.Instance.playerPlays = PlayerManager.Instance.playerPlays + 1;
+                }
+
 
             }
 
@@ -70,6 +81,7 @@ public class Card : MonoBehaviour
 
         if (isRotating && !isFaceUp)
         {
+            cardUsed = true;
 
             float rotationStep = rotationSpeed * Time.deltaTime;
             currentRotation += rotationStep;
@@ -84,9 +96,13 @@ public class Card : MonoBehaviour
                 isRotating = false;
                 currentRotation = 0f;
             }
+            cardUsed = false;
+
         }
         else if (isRotating && isFaceUp)
         {
+            cardUsed = true;
+
             SoundManager.Instance.PlayFlipping();
 
             float rotationStep = rotationSpeed * Time.deltaTime;
@@ -139,11 +155,8 @@ public class Card : MonoBehaviour
 
 
     public void RotationDelaySeconds(float timer)
-    {
-      
+    {      
         StartCoroutine(Returning(timer));
-
-
     }
 
     public void CallTypeCard(UniqueCard card)
@@ -157,15 +170,12 @@ public class Card : MonoBehaviour
     {
         yield return new WaitForSeconds(timer);
         RotationCard();
-
         isFaceUp = false;
-       // cardUsed = false;
     }
 
     IEnumerator AnimationDelay(float timer, bool value1)
     {
-        yield return new WaitForSeconds(timer);
-      
+        yield return new WaitForSeconds(timer);   
         isFaceUp = value1;
         cardUsed = true;    
     }

@@ -23,7 +23,7 @@ public class StartMenu : MonoBehaviour
         continueGame.onClick.AddListener(() => ButtonsGone());
         continueGame.onClick.AddListener(() => SoundManager.Instance.PlayFlipping());
         continueGame.onClick.AddListener(() => GameManager.Instance.LoadGame());
-        continueGame.onClick.AddListener(() => GameManager.Instance.LoadingSavedGame());
+
 
         exit.onClick.RemoveAllListeners();
         exit.onClick.AddListener(() => Application.Quit());

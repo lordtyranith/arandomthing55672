@@ -19,14 +19,15 @@ public class CardsHolder : MonoBehaviour
     }
     public void StartingGame()
     {
+        GameManager.Instance.mouseEnable = false;
         ResetFilled();
-        OrganizeColuns(GameManager.Instance.StageLevel);    
+        OrganizeColuns(GameManager.Instance.StageLevel, true);    
     }
 
     public void LoadingGame()
     {
-        ResetFilled();
-        OrganizeColuns(GameManager.Instance.StageLevel);
+        //ResetFilled();
+        OrganizeColuns(PlayerManager.Instance.stageLevel, false);
         LoadCardsOnTheTable();
         StartCoroutine(ContinueRound());
     }
@@ -52,7 +53,7 @@ public class CardsHolder : MonoBehaviour
             c.RotationCard();
             c.cardUsed = true;  
         }
-
+        GameManager.Instance.mouseEnable = true;
 
     }
     IEnumerator StartingRound()
@@ -68,9 +69,10 @@ public class CardsHolder : MonoBehaviour
             //  c.RotationCard();
             c.TurnCardFaceDown();
         }
+        GameManager.Instance.mouseEnable = true;
     }
 
-    public void OrganizeColuns(StageLevel stage)
+    public void OrganizeColuns(StageLevel stage, bool newGame)
     {
         EnableAllColuns();
 
@@ -103,7 +105,7 @@ public class CardsHolder : MonoBehaviour
                 break;
         }
 
-        ShuffleCards();
+        if(newGame) ShuffleCards();
     }
 
     public void DisableColum(int index)
@@ -145,7 +147,6 @@ public class CardsHolder : MonoBehaviour
         List<int> indexSelected = new List<int>();  
         foreach(UniqueCard card in GameManager.Instance.CardManager.CardsList)
         {
-            Debug.Log(card.CardName);   
             indexSelected.Add(indexList);
             indexList++;    
         }
