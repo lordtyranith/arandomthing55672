@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,10 +9,14 @@ public class GameManager : Singleton<GameManager>
     public CardManager CardManager;
     public CardsHolder CardsHolder;
 
+    public List<Card> cardTurnedPair1 = new List<Card>();    
+    public List<Card> cardTurnedPair2 = new List<Card>();    
+
+    public Queue<Card> cardsQueue = new Queue<Card>();
     public Card pair1;
     public Card pair2;
 
-
+    bool isComparing = false;
 
 
     public bool firstPair = true;   
@@ -21,48 +26,60 @@ public class GameManager : Singleton<GameManager>
         CardsHolder.StartingGame();
     }
 
-    public void CheckIfItsMatch()
+
+
+    public void StartCompair()
     {
-        if(pair1.cardType == pair2.cardType)
+        if (cardsQueue.Count >= 2)
+        {
+           
+           StartCoroutine(comparison());   
+         
+        }
+    }
+
+
+
+    IEnumerator comparison()
+    {
+        yield return new WaitUntil(() => isComparing == false);
+
+        isComparing = true;
+        Card first = cardsQueue.Dequeue();
+        Card second = cardsQueue.Dequeue();
+
+        yield return new WaitUntil(() => second.isRotating == false);
+
+        if(first.cardType == second.cardType)
         {
             Hit();
-
         }
         else
         {
 
-            Miss();
+            yield return new WaitForSeconds(1f);
+            first.TurnCardFaceDown();
+            second.TurnCardFaceDown();
 
         }
+        isComparing = false;
+
     }
+
+
+
 
     public void Hit()
     {
         PlayerManager.Instance.playerScore = PlayerManager.Instance.playerScore + 1;
         PlayerManager.Instance.playerCombo = PlayerManager.Instance.playerCombo + 1;
-
-
-        pair1.cardUsed = true;
-        pair2.cardUsed = true;  
-
-
-        pair1 = null;
-        pair2 = null;
-
-
+ 
     }
 
     public void Miss()
     {
-        pair1.RotationDelaySeconds(1.2f);
-        pair2.RotationDelaySeconds(1.2f);
-
         PlayerManager.Instance.playerCombo = 0;
-
-    
-
-        pair1 = null;
-        pair2 = null;
     }
+
 
 }

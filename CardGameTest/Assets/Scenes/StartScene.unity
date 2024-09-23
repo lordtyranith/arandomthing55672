@@ -517,8 +517,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerScore: 0
   playerCombo: 0
-  playerMatch: 0
-  difficultyLevel: 0
+  stageLevel: 0
   playerPlays: 0
 --- !u!4 &547192268
 Transform:
@@ -2026,7 +2025,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1a250d0042aa8b49a8c49b1f427e0a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StageLevel: 4
   CardManager: {fileID: 11400000, guid: bca0af9945323274eb400dfdd61b5ac7, type: 2}
+  CardsHolder: {fileID: 2074714100}
+  cardTurnedPair1: []
+  cardTurnedPair2: []
+  pair1: {fileID: 0}
+  pair2: {fileID: 0}
+  firstPair: 1
 --- !u!4 &1461424983
 Transform:
   m_ObjectHideFlags: 0
@@ -3163,6 +3169,28 @@ MonoBehaviour:
     - {fileID: 567861140}
     - {fileID: 1170346784}
     - {fileID: 759150759}
+  ActiveCards: []
+  Cards:
+  - {fileID: 1816884014}
+  - {fileID: 989980584}
+  - {fileID: 1708330792}
+  - {fileID: 435105251}
+  - {fileID: 2054324552}
+  - {fileID: 192675784}
+  - {fileID: 567861140}
+  - {fileID: 542154593}
+  - {fileID: 70715502}
+  - {fileID: 751272774}
+  - {fileID: 232630132}
+  - {fileID: 1945818802}
+  - {fileID: 1170346784}
+  - {fileID: 1398382962}
+  - {fileID: 1696015112}
+  - {fileID: 1600547254}
+  - {fileID: 1547898607}
+  - {fileID: 1298748182}
+  - {fileID: 1339192924}
+  - {fileID: 759150759}
 --- !u!1001 &2081091817
 PrefabInstance:
   m_ObjectHideFlags: 0

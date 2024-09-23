@@ -26,20 +26,24 @@ public class Card : MonoBehaviour
             RotationCard();
             if (GameManager.Instance.firstPair)
             {
-                GameManager.Instance.pair1 = this;
+                //GameManager.Instance.cardTurnedPair1.Add(this);
+                GameManager.Instance.cardsQueue.Enqueue(this);  
                 GameManager.Instance.firstPair = false;
 
             }
             else
             {
-                GameManager.Instance.pair2 = this;
+                //GameManager.Instance.cardTurnedPair2.Add(this);
+                GameManager.Instance.cardsQueue.Enqueue(this);
+
+                GameManager.Instance.StartCompair();
+
                 GameManager.Instance.firstPair = true;
-                GameManager.Instance.CheckIfItsMatch();
+                //   GameManager.Instance.CheckCardsQueue();
 
-
+                PlayerManager.Instance.playerPlays = PlayerManager.Instance.playerPlays + 1;
 
             }
-            PlayerManager.Instance.playerPlays = PlayerManager.Instance.playerPlays + 1;
 
             StartCoroutine(AnimationDelay(1.2f, true));
         }
@@ -52,19 +56,15 @@ public class Card : MonoBehaviour
         isRotating = true;
     }
 
+    public void TurnCardFaceDown()
+    {
+        isRotating = true;
+        isFaceUp = false;
+        cardUsed = false;
+
+    }
     private void Update()
     {
-
-        if (isFaceUp)
-        {
-            cardUsed = true;
-        }
-        else
-        {
-            cardUsed = false;
-        }
-
-
 
 
         if (isRotating && !isFaceUp)
@@ -126,7 +126,7 @@ public class Card : MonoBehaviour
         RotationCard();
 
         isFaceUp = false;
-        //cardUsed = false;
+       // cardUsed = false;
     }
 
     IEnumerator AnimationDelay(float timer, bool value1)
@@ -134,6 +134,6 @@ public class Card : MonoBehaviour
         yield return new WaitForSeconds(timer);
       
         isFaceUp = value1;
-        
+        cardUsed = true;    
     }
 }
