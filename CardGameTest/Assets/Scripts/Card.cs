@@ -17,30 +17,29 @@ public class Card : MonoBehaviour
     public bool isRotating = false;
     public bool isFaceUp = false;
 
+    public float scaleFactor = 1.5f; 
+    public float duration = 0.2f; 
+
+
     public bool cardUsed = false;
 
     private void OnMouseDown()
     {
         if (!cardUsed)
         {
+            SoundManager.Instance.PlayFlipping();
+
             RotationCard();
             if (GameManager.Instance.firstPair)
             {
-                //GameManager.Instance.cardTurnedPair1.Add(this);
                 GameManager.Instance.cardsQueue.Enqueue(this);  
                 GameManager.Instance.firstPair = false;
-
             }
             else
             {
-                //GameManager.Instance.cardTurnedPair2.Add(this);
                 GameManager.Instance.cardsQueue.Enqueue(this);
-
                 GameManager.Instance.StartCompair();
-
                 GameManager.Instance.firstPair = true;
-                //   GameManager.Instance.CheckCardsQueue();
-
                 PlayerManager.Instance.playerPlays = PlayerManager.Instance.playerPlays + 1;
 
             }
@@ -69,6 +68,7 @@ public class Card : MonoBehaviour
 
         if (isRotating && !isFaceUp)
         {
+
             float rotationStep = rotationSpeed * Time.deltaTime;
             currentRotation += rotationStep;
 
@@ -85,6 +85,8 @@ public class Card : MonoBehaviour
         }
         else if (isRotating && isFaceUp)
         {
+            SoundManager.Instance.PlayFlipping();
+
             float rotationStep = rotationSpeed * Time.deltaTime;
             currentRotation -= rotationStep;
             transform.Rotate(0f, 0f, -rotationStep);
@@ -95,14 +97,43 @@ public class Card : MonoBehaviour
                 transform.Rotate(0f, 0f, excessRotation);
                 isRotating = false;
                 currentRotation = 0f;
+
             }
 
         }
 
     }
 
+    public void TriggerScaleFeedback()
+    {
+        StartCoroutine(AnimateScale());
+    }
+
+    IEnumerator AnimateScale()
+    {
+        Vector3 originalScale = transform.localScale;
+        Vector3 targetScale = originalScale * scaleFactor; 
+
+ 
+        float time = 0f;
+        while (time < duration)
+        {
+            transform.localScale = Vector3.Lerp(originalScale, targetScale, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        transform.localScale = targetScale;
 
 
+        time = 0f;
+        while (time < duration)
+        {
+            transform.localScale = Vector3.Lerp(targetScale, originalScale, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        transform.localScale = originalScale;
+    }
 
 
     public void RotationDelaySeconds(float timer)

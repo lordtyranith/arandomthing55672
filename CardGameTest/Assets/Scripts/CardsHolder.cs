@@ -6,8 +6,8 @@ public class CardsHolder : MonoBehaviour
 {
 
     [SerializeField] List<Colum> colums = new List<Colum>();
-    [SerializeField] List<Card> ActiveCards = new List<Card>(); 
-    [SerializeField] List<Card> Cards = new List<Card>(); 
+    public List<Card> ActiveCards = new List<Card>(); 
+    [SerializeField] List<Card> Cards = new List<Card>();
 
 
     public void StartingGame()
@@ -15,6 +15,7 @@ public class CardsHolder : MonoBehaviour
         OrganizeColuns(GameManager.Instance.StageLevel);
         ShuffleCards();
         StartCoroutine(StartingRound());
+
     }
 
     IEnumerator StartingRound()

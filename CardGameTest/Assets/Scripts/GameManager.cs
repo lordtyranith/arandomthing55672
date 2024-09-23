@@ -9,21 +9,23 @@ public class GameManager : Singleton<GameManager>
     public CardManager CardManager;
     public CardsHolder CardsHolder;
 
-    public List<Card> cardTurnedPair1 = new List<Card>();    
-    public List<Card> cardTurnedPair2 = new List<Card>();    
-
     public Queue<Card> cardsQueue = new Queue<Card>();
-    public Card pair1;
-    public Card pair2;
+    public List<Card> cardTurnedRight = new List<Card>();   
 
     bool isComparing = false;
-
+    bool gameOver = false;
 
     public bool firstPair = true;   
 
     private void Start()
     {
+        cardTurnedRight.Clear();    
         CardsHolder.StartingGame();
+        PlayerManager.Instance.playerPlays = 0;
+        PlayerManager.Instance.playerCombo = 0;
+        PlayerManager.Instance.playerScore = 0;
+        UIManager.Instance.UpdatingUI();
+
     }
 
 
@@ -52,15 +54,20 @@ public class GameManager : Singleton<GameManager>
 
         if(first.cardType == second.cardType)
         {
+            first.TriggerScaleFeedback();
+            second.TriggerScaleFeedback();
             Hit();
+            cardTurnedRight.Add(first);
+            cardTurnedRight.Add(second);
+
+
         }
         else
         {
-
+            Miss();
             yield return new WaitForSeconds(1f);
             first.TurnCardFaceDown();
             second.TurnCardFaceDown();
-
         }
         isComparing = false;
 
@@ -73,13 +80,61 @@ public class GameManager : Singleton<GameManager>
     {
         PlayerManager.Instance.playerScore = PlayerManager.Instance.playerScore + 1;
         PlayerManager.Instance.playerCombo = PlayerManager.Instance.playerCombo + 1;
- 
+        SoundManager.Instance.PlayCorrect();
+        UIManager.Instance.UpdatingUI();
+
+
     }
 
     public void Miss()
     {
         PlayerManager.Instance.playerCombo = 0;
+        SoundManager.Instance.PlayWrong();
+        UIManager.Instance.UpdatingUI();
+
+
     }
 
+    private void Update()
+    {
+        PlayerVictory();
+        PlayerLose();
+
+        // StartCoroutine(CheckIfGameEnds());
+    }
+
+    IEnumerator CheckIfGameEnds()
+    {
+        yield return new WaitForSeconds(0.1f);
+        PlayerVictory();
+        PlayerLose();
+
+    }
+    public void PlayerVictory()
+    {
+        if(!gameOver)
+        {
+            if (cardTurnedRight.Count == CardsHolder.ActiveCards.Count)
+            {
+                // Victory Match
+                SoundManager.Instance.PlayWin();
+                gameOver = true;
+            }
+        }
+  
+    }
+
+    public void PlayerLose()
+    {
+        if (!gameOver)
+        {
+            if (PlayerManager.Instance.playerPlays == CardsHolder.ActiveCards.Count * 2)
+            {
+                // Lose match
+                SoundManager.Instance.PlayLose();
+            }
+        }
+ 
+    }
 
 }
