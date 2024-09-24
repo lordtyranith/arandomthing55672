@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5524577053597342131}
   m_Layer: 0
   m_Name: CardPrototype
-  m_TagString: Untagged
+  m_TagString: card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,9 +109,13 @@ MonoBehaviour:
     CardID: 
     CardMaterial: {fileID: 0}
   cardFacedUp: {fileID: 4958523088689696714}
+  cardFilled: 0
   rotationSpeed: 250
   isRotating: 0
   isFaceUp: 0
+  scaleFactor: 1.5
+  duration: 0.2
+  cardUsed: 0
 --- !u!65 &5524577053597342131
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [System.Serializable]
 
@@ -20,9 +21,33 @@ public class PlayerManager : Singleton<PlayerManager>
     public List<Card> turnedFaceUp = new List<Card>();
 
     public List<UniqueCard> cardsTypeActive = new List<UniqueCard>();
- 
 
 
+    void DetectClickOnObject()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); 
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            if(hit.collider.tag == "card")
+            {
+                if (!hit.collider.gameObject.transform.GetComponent<Card>().cardUsed)
+                {
+                    hit.collider.gameObject.transform.GetComponent<Card>().ActivateCard();
+                }
+            }
+        }
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0) && !UIManager.Instance.blackScreenOn)
+        {
+            DetectClickOnObject();
+
+        }
+    }
 
 }
 

@@ -13,7 +13,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] TextMeshProUGUI totalScore;
     [SerializeField] Image blackscreen;
     public float fadeDuration = 5.0f;
-
+    public bool blackScreenOn = true;
 
 
     public void UpdatingUI()
@@ -50,11 +50,16 @@ public class UIManager : Singleton<UIManager>
 
         blackscreen.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
         yield return new WaitForSeconds(0.2f);
-        blackscreen.gameObject.SetActive(false);    
+        blackscreen.gameObject.SetActive(false);
+        blackScreenOn = false;
+
     }
 
     IEnumerator FadeInOut()
     {
+
+        blackScreenOn = true;
+
         blackscreen.gameObject.SetActive(true);
 
         Color originalColor = blackscreen.color;
@@ -82,7 +87,9 @@ public class UIManager : Singleton<UIManager>
         }
 
         blackscreen.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f); 
-        blackscreen.gameObject.SetActive(false); 
+        blackscreen.gameObject.SetActive(false);
+        blackScreenOn = false;
+
 
 
     }

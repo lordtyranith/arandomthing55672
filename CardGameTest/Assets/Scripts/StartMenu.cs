@@ -19,10 +19,10 @@ public class StartMenu : MonoBehaviour
         newGame.onClick.AddListener(() => GameManager.Instance.StartingLevel());
 
         continueGame.onClick.RemoveAllListeners();
+        continueGame.onClick.AddListener(() => GameManager.Instance.LoadGame());
         continueGame.onClick.AddListener(() => UIManager.Instance.StartFadeOut());
         continueGame.onClick.AddListener(() => ButtonsGone());
         continueGame.onClick.AddListener(() => SoundManager.Instance.PlayFlipping());
-        continueGame.onClick.AddListener(() => GameManager.Instance.LoadGame());
 
 
         exit.onClick.RemoveAllListeners();

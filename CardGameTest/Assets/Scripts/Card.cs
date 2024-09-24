@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Card : MonoBehaviour
 {
@@ -22,10 +23,11 @@ public class Card : MonoBehaviour
 
 
     public bool cardUsed = false;
+ 
 
-    private void OnMouseDown()
+    public void ActivateCard()
     {
-        if (!cardUsed && GameManager.Instance.mouseEnable)
+        if (!cardUsed)
         {
             cardUsed = true;
             SoundManager.Instance.PlayFlipping();
@@ -39,27 +41,28 @@ public class Card : MonoBehaviour
             }
             else
             {
-                GameManager.Instance.pair2 = this;
-
-                if(GameManager.Instance.pair1 == GameManager.Instance.pair2)
                 {
-                    return;
-                }
-                else
-                {
-                    GameManager.Instance.cardsQueue.Enqueue(this);
-                    GameManager.Instance.StartCompair();
-                    GameManager.Instance.firstPair = true;
-                    PlayerManager.Instance.playerPlays = PlayerManager.Instance.playerPlays + 1;
-                }
+                    GameManager.Instance.pair2 = this;
+
+                    if (GameManager.Instance.pair1 == GameManager.Instance.pair2)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        GameManager.Instance.cardsQueue.Enqueue(this);
+                        GameManager.Instance.StartCompair();
+                        GameManager.Instance.firstPair = true;
+                        PlayerManager.Instance.playerPlays = PlayerManager.Instance.playerPlays + 1;
+                    }
 
 
+                }
             }
+
 
             StartCoroutine(AnimationDelay(1.2f, true));
         }
-
-
     }
 
     public void RotationCard()
@@ -77,8 +80,7 @@ public class Card : MonoBehaviour
     }
     private void Update()
     {
-
-
+       
         if (isRotating && !isFaceUp)
         {
             cardUsed = true;
